@@ -26,7 +26,7 @@ RUN useradd -m appuser
 USER appuser
 
 # Directorio de trabajo
-WORKDIR /app/src
+WORKDIR /app
 
 # Copiar el código
 COPY . .
