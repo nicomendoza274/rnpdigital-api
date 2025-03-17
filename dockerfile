@@ -11,8 +11,8 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Instala los navegadores de Playwright
-RUN apt-get update && apt-get install -y ffmpeg
-# RUN playwright install
+# RUN apt-get update && apt-get install -y ffmpeg
+RUN playwright install
 RUN playwright install-deps
 
 # Expone el puerto
