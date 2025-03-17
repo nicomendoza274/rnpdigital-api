@@ -11,8 +11,8 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Instala los navegadores de Playwright
-RUN apt-get update && apt-get install -y ffmpeg libnss3
-RUN playwright install --with-deps chromium
+RUN apt-get update && apt-get install -y ffmpeg
+RUN playwright install
 
 # Expone el puerto
 EXPOSE 8000
