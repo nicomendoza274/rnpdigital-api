@@ -6,11 +6,12 @@ COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Instalar Chromium con sus dependencias y verificar la instalación
+# Instalar Chromium con sus dependencias
 RUN playwright install chromium
 RUN playwright install-deps chromium
-RUN mkdir -p /usr/local/lib/python3.10/dist-packages/playwright/driver/package/.local-browsers/chromium_headless_shell-1155/chrome-linux/
-RUN ln -s /ms-playwright/chromium-*/chrome-linux/chrome /usr/local/lib/python3.10/dist-packages/playwright/driver/package/.local-browsers/chromium_headless_shell-1155/chrome-linux/headless_shell
+
+# Configurar variable de entorno para que Playwright use el navegador instalado
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 
 EXPOSE 8000
 
