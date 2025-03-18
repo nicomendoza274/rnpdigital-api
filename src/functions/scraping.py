@@ -1,92 +1,92 @@
-from playwright.async_api import async_playwright, StorageState
+from playwright.sync_api import sync_playwright, StorageState
 from models.vehicle import Vehicle, GeneralFeatures, MotorFeatures
 from constants.xpath import *
 from constants.credentials import USER_CREDENTIAL, PASS_CREDENTIAL
 from constants.urls import LOGIN_URL, VEHICLE_QUERY
 
 
-async def login() -> StorageState:
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
-        context = await browser.new_context()
+def login() -> StorageState:
+     with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context()
 
-        page = await context.new_page()
-        await page.goto(LOGIN_URL)
-        await page.locator(USER_INPUT).type(USER_CREDENTIAL)
-        await page.locator(PASS_INPUT).type(PASS_CREDENTIAL)
-        await page.locator(BTN_ENTER).click(force=False)
-        await page.wait_for_timeout(2000)
-        auth = await context.storage_state()
+        page = context.new_page()
+        page.goto(LOGIN_URL)
+        page.locator(USER_INPUT).type(USER_CREDENTIAL)
+        page.locator(PASS_INPUT).type(PASS_CREDENTIAL)
+        page.locator(BTN_ENTER).click(force=False)
+        page.wait_for_timeout(2000)
+        auth = context.storage_state()
         return auth
 
 
-async def scraping_vehicle(auth: StorageState, plate: str) -> Vehicle:
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
-        context = await browser.new_context(storage_state=auth)
-        page = await context.new_page()
+def scraping_vehicle(auth: StorageState, plate: str) -> Vehicle:
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context(storage_state=auth)
+        page = context.new_page()
 
-        await page.goto(VEHICLE_QUERY)
-        await page.wait_for_timeout(1000)
-        await page.locator(PLATE_NUMBER_INPUT).type(plate)
-        await page.locator(BTN_CONSULT).click(force=False)
-        await page.wait_for_timeout(1000)
+        page.goto(VEHICLE_QUERY)
+        page.wait_for_timeout(1000)
+        page.locator(PLATE_NUMBER_INPUT).type(plate)
+        page.locator(BTN_CONSULT).click(force=False)
+        page.wait_for_timeout(1000)
 
-        brand = await page.locator(BRAND).inner_text()
-        style = await page.locator(STYLE).inner_text()
+        brand = page.locator(BRAND).inner_text(timeout=60000)
+        style = page.locator(STYLE).inner_text(timeout=60000)
 
-        category = await page.locator(CATEGORY).inner_text()
-        capacity = await page.locator(CAPACITY).inner_text()
+        category = page.locator(CATEGORY).inner_text(timeout=60000)
+        capacity = page.locator(CAPACITY).inner_text(timeout=60000)
 
-        serie_number = await page.locator(SERIE_NUMBER).inner_text()
-        empty_weight = await page.locator(EMPTY_WEIGHT).inner_text()
+        serie_number = page.locator(SERIE_NUMBER).inner_text(timeout=60000)
+        empty_weight = page.locator(EMPTY_WEIGHT).inner_text(timeout=60000)
 
-        bodywork = await page.locator(BODYWORK).inner_text()
-        net_weight = await page.locator(NET_WEIGHT).inner_text()
+        bodywork = page.locator(BODYWORK).inner_text(timeout=60000)
+        net_weight = page.locator(NET_WEIGHT).inner_text(timeout=60000)
 
-        traction = await page.locator(TRACTION).inner_text()
-        gross_weight = await page.locator(GROSS_WEIGHT).inner_text()
+        traction = page.locator(TRACTION).inner_text(timeout=60000)
+        gross_weight = page.locator(GROSS_WEIGHT).inner_text(timeout=60000)
 
-        chassis_number = await page.locator(CHASSIS_NUMBER).inner_text()
-        treasury_value = await page.locator(TREASURY_VALUE).inner_text()
+        chassis_number = page.locator(CHASSIS_NUMBER).inner_text(timeout=60000)
+        treasury_value = page.locator(TREASURY_VALUE).inner_text(timeout=60000)
 
-        manufacturing_year = await page.locator(MANUFACTURING_YEAR).inner_text()
-        actual_status = await page.locator(ACTUAL_STATUS).inner_text()
+        manufacturing_year = page.locator(MANUFACTURING_YEAR).inner_text(timeout=60000)
+        actual_status = page.locator(ACTUAL_STATUS).inner_text(timeout=60000)
 
-        length = await page.locator(LENGTH).inner_text()
-        tax_status = await page.locator(TAX_STATUS).inner_text()
+        length = page.locator(LENGTH).inner_text(timeout=60000)
+        tax_status = page.locator(TAX_STATUS).inner_text(timeout=60000)
 
-        cabin = await page.locator(CABIN).inner_text()
-        tax_class = await page.locator(TAX_CLASS).inner_text()
+        cabin = page.locator(CABIN).inner_text(timeout=60000)
+        tax_class = page.locator(TAX_CLASS).inner_text(timeout=60000)
 
-        roof = await page.locator(ROOF).inner_text()
-        use = await page.locator(USE).inner_text()
+        roof = page.locator(ROOF).inner_text(timeout=60000)
+        use = page.locator(USE).inner_text(timeout=60000)
 
-        trailer_weight = await page.locator(TRAILER_WEIGHT).inner_text()
-        contract_price = await page.locator(CONTRACT_PRICE).inner_text()
+        trailer_weight = page.locator(TRAILER_WEIGHT).inner_text(timeout=60000)
+        contract_price = page.locator(CONTRACT_PRICE).inner_text(timeout=60000)
 
-        color = await page.locator(COLOR).inner_text()
-        registration_number = await page.locator(REGISTRATION_NUMBER).inner_text()
+        color = page.locator(COLOR).inner_text(timeout=60000)
+        registration_number = page.locator(REGISTRATION_NUMBER).inner_text(timeout=60000)
 
-        converted = await page.locator(CONVERTED).inner_text()
-        currency = await page.locator(CURRENCY).inner_text()
+        converted = page.locator(CONVERTED).inner_text(timeout=60000)
+        currency = page.locator(CURRENCY).inner_text(timeout=60000)
 
-        vin_number = await page.locator(VIN_NUMBER).inner_text()
+        vin_number = page.locator(VIN_NUMBER).inner_text(timeout=60000)
 
-        engine_number = await page.locator(ENGINE_NUMBER).inner_text()
-        motor_brand = await page.locator(MOTOR_BRAND).inner_text()
+        engine_number = page.locator(ENGINE_NUMBER).inner_text(timeout=60000)
+        motor_brand = page.locator(MOTOR_BRAND).inner_text(timeout=60000)
 
-        motor_serie_number = await page.locator(MOTOR_SERIE_NUMBER).inner_text()
-        model = await page.locator(MODEL).inner_text()
+        motor_serie_number = page.locator(MOTOR_SERIE_NUMBER).inner_text(timeout=60000)
+        model = page.locator(MODEL).inner_text(timeout=60000)
 
-        cylinder_capacity = await page.locator(CYLINDER_CAPACITY).inner_text()
-        cylinders = await page.locator(CYLINDERS).inner_text()
+        cylinder_capacity = page.locator(CYLINDER_CAPACITY).inner_text(timeout=60000)
+        cylinders = page.locator(CYLINDERS).inner_text(timeout=60000)
 
-        potency = await page.locator(POTENCY).inner_text()
-        fuel = await page.locator(FUEL).inner_text()
+        potency = page.locator(POTENCY).inner_text(timeout=60000)
+        fuel = page.locator(FUEL).inner_text(timeout=60000)
 
-        manufacturer = await page.locator(MANUFACTURER).inner_text()
-        origin = await page.locator(ORIGIN).inner_text()
+        manufacturer = page.locator(MANUFACTURER).inner_text(timeout=60000)
+        origin = page.locator(ORIGIN).inner_text(timeout=60000)
 
         response_data = Vehicle(
             general_features=GeneralFeatures(

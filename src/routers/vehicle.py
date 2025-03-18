@@ -13,6 +13,6 @@ router = APIRouter(
     response_model=Vehicle,
     summary="Get Vehicle",
 )
-async def get_vehicle(plate: str):
-    vehicle_data = await VehicleService().get_data(plate)
+def get_vehicle(plate: str):
+    vehicle_data = VehicleService().get_data(plate)
     return vehicle_data
