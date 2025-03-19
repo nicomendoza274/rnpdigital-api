@@ -13,33 +13,23 @@ args = [
     "--single-process",
 ]
 
-def login() -> StorageState:
-     with sync_playwright() as p:
+def scraping_vehicle(plate: str) -> Vehicle:
+    with sync_playwright() as p:
         browser = p.chromium.launch(headless=True, args=args)
         context = browser.new_context()
-
         page = context.new_page()
+
         page.goto(LOGIN_URL)
         page.locator(USER_INPUT).type(USER_CREDENTIAL)
         page.locator(PASS_INPUT).type(PASS_CREDENTIAL)
         page.locator(BTN_ENTER).click(force=False)
         page.wait_for_timeout(2000)
-        auth = context.storage_state()
-        print(auth)
-        return auth
-
-
-def scraping_vehicle(auth: StorageState, plate: str) -> Vehicle:
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True, args=args)
-        context = browser.new_context(storage_state=auth)
-        page = context.new_page()
 
         page.goto(VEHICLE_QUERY)
-        page.wait_for_timeout(1000)
+        page.wait_for_timeout(2000)
         page.locator(PLATE_NUMBER_INPUT).type(plate)
         page.locator(BTN_CONSULT).click(force=False)
-        page.wait_for_timeout(1000)
+        page.wait_for_timeout(2000)
 
         brand = page.locator(BRAND).inner_text()
         style = page.locator(STYLE).inner_text()
