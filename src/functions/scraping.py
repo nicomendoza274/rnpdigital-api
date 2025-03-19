@@ -4,10 +4,18 @@ from constants.xpath import *
 from constants.credentials import USER_CREDENTIAL, PASS_CREDENTIAL
 from constants.urls import LOGIN_URL, VEHICLE_QUERY
 
+args = [
+    "--no-sandbox",
+    "--disable-setuid-sandbox",
+    "--disable-dev-shm-usage",
+    "--disable-accelerated-2d-canvas",
+    "--no-zygote",
+    "--single-process",
+]
 
 def login() -> StorageState:
      with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=True, args=args)
         context = browser.new_context()
 
         page = context.new_page()
@@ -17,12 +25,13 @@ def login() -> StorageState:
         page.locator(BTN_ENTER).click(force=False)
         page.wait_for_timeout(2000)
         auth = context.storage_state()
+        print(auth)
         return auth
 
 
 def scraping_vehicle(auth: StorageState, plate: str) -> Vehicle:
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=True, args=args)
         context = browser.new_context(storage_state=auth)
         page = context.new_page()
 
@@ -32,61 +41,61 @@ def scraping_vehicle(auth: StorageState, plate: str) -> Vehicle:
         page.locator(BTN_CONSULT).click(force=False)
         page.wait_for_timeout(1000)
 
-        brand = page.locator(BRAND).inner_text(timeout=60000)
-        style = page.locator(STYLE).inner_text(timeout=60000)
+        brand = page.locator(BRAND).inner_text()
+        style = page.locator(STYLE).inner_text()
 
-        category = page.locator(CATEGORY).inner_text(timeout=60000)
-        capacity = page.locator(CAPACITY).inner_text(timeout=60000)
+        category = page.locator(CATEGORY).inner_text()
+        capacity = page.locator(CAPACITY).inner_text()
 
-        serie_number = page.locator(SERIE_NUMBER).inner_text(timeout=60000)
-        empty_weight = page.locator(EMPTY_WEIGHT).inner_text(timeout=60000)
+        serie_number = page.locator(SERIE_NUMBER).inner_text()
+        empty_weight = page.locator(EMPTY_WEIGHT).inner_text()
 
-        bodywork = page.locator(BODYWORK).inner_text(timeout=60000)
-        net_weight = page.locator(NET_WEIGHT).inner_text(timeout=60000)
+        bodywork = page.locator(BODYWORK).inner_text()
+        net_weight = page.locator(NET_WEIGHT).inner_text()
 
-        traction = page.locator(TRACTION).inner_text(timeout=60000)
-        gross_weight = page.locator(GROSS_WEIGHT).inner_text(timeout=60000)
+        traction = page.locator(TRACTION).inner_text()
+        gross_weight = page.locator(GROSS_WEIGHT).inner_text()
 
-        chassis_number = page.locator(CHASSIS_NUMBER).inner_text(timeout=60000)
-        treasury_value = page.locator(TREASURY_VALUE).inner_text(timeout=60000)
+        chassis_number = page.locator(CHASSIS_NUMBER).inner_text()
+        treasury_value = page.locator(TREASURY_VALUE).inner_text()
 
-        manufacturing_year = page.locator(MANUFACTURING_YEAR).inner_text(timeout=60000)
-        actual_status = page.locator(ACTUAL_STATUS).inner_text(timeout=60000)
+        manufacturing_year = page.locator(MANUFACTURING_YEAR).inner_text()
+        actual_status = page.locator(ACTUAL_STATUS).inner_text()
 
-        length = page.locator(LENGTH).inner_text(timeout=60000)
-        tax_status = page.locator(TAX_STATUS).inner_text(timeout=60000)
+        length = page.locator(LENGTH).inner_text()
+        tax_status = page.locator(TAX_STATUS).inner_text()
 
-        cabin = page.locator(CABIN).inner_text(timeout=60000)
-        tax_class = page.locator(TAX_CLASS).inner_text(timeout=60000)
+        cabin = page.locator(CABIN).inner_text()
+        tax_class = page.locator(TAX_CLASS).inner_text()
 
-        roof = page.locator(ROOF).inner_text(timeout=60000)
-        use = page.locator(USE).inner_text(timeout=60000)
+        roof = page.locator(ROOF).inner_text()
+        use = page.locator(USE).inner_text()
 
-        trailer_weight = page.locator(TRAILER_WEIGHT).inner_text(timeout=60000)
-        contract_price = page.locator(CONTRACT_PRICE).inner_text(timeout=60000)
+        trailer_weight = page.locator(TRAILER_WEIGHT).inner_text()
+        contract_price = page.locator(CONTRACT_PRICE).inner_text()
 
-        color = page.locator(COLOR).inner_text(timeout=60000)
-        registration_number = page.locator(REGISTRATION_NUMBER).inner_text(timeout=60000)
+        color = page.locator(COLOR).inner_text()
+        registration_number = page.locator(REGISTRATION_NUMBER).inner_text()
 
-        converted = page.locator(CONVERTED).inner_text(timeout=60000)
-        currency = page.locator(CURRENCY).inner_text(timeout=60000)
+        converted = page.locator(CONVERTED).inner_text()
+        currency = page.locator(CURRENCY).inner_text()
 
-        vin_number = page.locator(VIN_NUMBER).inner_text(timeout=60000)
+        vin_number = page.locator(VIN_NUMBER).inner_text()
 
-        engine_number = page.locator(ENGINE_NUMBER).inner_text(timeout=60000)
-        motor_brand = page.locator(MOTOR_BRAND).inner_text(timeout=60000)
+        engine_number = page.locator(ENGINE_NUMBER).inner_text()
+        motor_brand = page.locator(MOTOR_BRAND).inner_text()
 
-        motor_serie_number = page.locator(MOTOR_SERIE_NUMBER).inner_text(timeout=60000)
-        model = page.locator(MODEL).inner_text(timeout=60000)
+        motor_serie_number = page.locator(MOTOR_SERIE_NUMBER).inner_text()
+        model = page.locator(MODEL).inner_text()
 
-        cylinder_capacity = page.locator(CYLINDER_CAPACITY).inner_text(timeout=60000)
-        cylinders = page.locator(CYLINDERS).inner_text(timeout=60000)
+        cylinder_capacity = page.locator(CYLINDER_CAPACITY).inner_text()
+        cylinders = page.locator(CYLINDERS).inner_text()
 
-        potency = page.locator(POTENCY).inner_text(timeout=60000)
-        fuel = page.locator(FUEL).inner_text(timeout=60000)
+        potency = page.locator(POTENCY).inner_text()
+        fuel = page.locator(FUEL).inner_text()
 
-        manufacturer = page.locator(MANUFACTURER).inner_text(timeout=60000)
-        origin = page.locator(ORIGIN).inner_text(timeout=60000)
+        manufacturer = page.locator(MANUFACTURER).inner_text()
+        origin = page.locator(ORIGIN).inner_text()
 
         response_data = Vehicle(
             general_features=GeneralFeatures(
